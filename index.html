@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>كاندي كات - مستلزمات الحيوانات</title>
+  <meta name="theme-color" content="#0a7c2f">
+  <style>
+    :root{--gap:12px;--r:12px;--shadow:0 8px 24px rgba(0,0,0,.08);--pri:#0a7c2f;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Naskh Arabic",Arial,sans-serif;background:#fafafa;color:#1f2937}
+    header{position:sticky;top:0;background:#fff;box-shadow:var(--shadow);z-index:10;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    .container{max-width:1100px;margin:16px auto;padding:0 14px;display:grid;grid-template-columns:240px 1fr;gap:var(--gap)}
+    @media (max-width: 900px){.container{grid-template-columns:1fr} aside{order:-1}}
+    aside{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:10px;height:max-content;position:sticky;top:68px}
+    .cats{display:flex;flex-direction:column;gap:6px}
+    .cat{border:none;border-radius:10px;padding:10px;font-weight:600;cursor:pointer;background:#f2f2f2;text-align:right}
+    .cat.active{background:var(--pri);color:#fff}
+    .search{display:flex;gap:8px;margin-top:8px}
+    input[type="search"]{flex:1;padding:10px;border-radius:10px;border:1px solid #e5e7eb}
+    main{display:flex;flex-direction:column;gap:var(--gap)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--gap)}
+    .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+    .card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee}
+    .p{padding:10px;display:flex;flex-direction:column;gap:6px}
+    .title{font-weight:700}
+    .price{color:var(--pri);font-weight:800}
+    .btn{border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+    .btn-primary{background:var(--pri);color:#fff}
+    .btn-ghost{background:#f2f2f2}
+    .toolbar{display:flex;gap:10px;align-items:center}
+    .badge{background:var(--pri);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
+    .cart{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:10px;position:sticky;top:68px;height:max-content}
+    .cart h3{margin:6px 4px}
+    .cart-item{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center}
+    .qty{display:flex;align-items:center;gap:6px}
+    .qty button{width:28px;height:28px;border-radius:8px;border:none;background:#f2f2f2;cursor:pointer}
+    .totals{display:flex;justify-content:space-between;font-weight:800;padding-top:8px;border-top:1px dashed #e5e7eb}
+    footer{text-align:center;padding:30px;color:#6b7280}
+    .empty{text-align:center;color:#6b7280;padding:16px}
+    dialog{border:none;border-radius:14px;box-shadow:var(--shadow);max-width:520px;width:92%;padding:0}
+    dialog::backdrop{background:rgba(0,0,0,.35)}
+    .modal-body{padding:12px}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee}
+    .close{border:none;background:transparent;font-size:22px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="shopName">كاندي كات</h1>
+    <div class="toolbar">
+      <div class="search"><input id="q" type="search" placeholder="ابحث عن منتج…"></div>
+      <div>🛒 <span id="cartCount" class="badge">0</span></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside>
+      <strong>الأقسام</strong>
+      <div id="cats" class="cats"></div>
+    </aside>
+
+    <main>
+      <div id="products" class="grid"></div>
+    </main>
+
+    <div class="cart">
+      <h3>سلة الشراء</h3>
+      <div id="cartList"></div>
+      <div class="totals"><span>المجموع</span><span id="total">0</span></div>
+      <button id="checkout" class="btn btn-primary">إكمال الطلب عبر واتساب</button>
+      <div class="empty">الدفع عند الاستلام</div>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> <span id="shopName2">كاندي كات</span></footer>
+
+  <dialog id="modal">
+    <div class="modal-header">
+      <strong id="mTitle"></strong>
+      <button class="close" onclick="modal.close()">✕</button>
+    </div>
+    <div class="modal-body">
+      <img id="mImg" alt="" style="width:100%;border-radius:12px;aspect-ratio:16/9;object-fit:cover;background:#eee">
+      <p id="mDesc" style="margin-top:10px;color:#374151"></p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <span id="mPrice" class="price"></span>
+        <button id="mAdd" class="btn btn-primary">إضافة للسلة</button>
+      </div>
+    </div>
+  </dialog>
+
+<script>
+let DATA = null;
+const state = { cat:"", filter:"", items:{} };
+const el = s => document.querySelector(s);
+const fmt = (n, cur) => n.toLocaleString('ar-IQ') + " " + cur;
+
+async function load(){
+  const res = await fetch("data.json?cache="+Date.now());
+  DATA = await res.json();
+  document.title = DATA.shopName + " - مستلزمات الحيوانات";
+  el("#shopName").textContent = DATA.shopName;
+  el("#shopName2").textContent = DATA.shopName;
+  renderCats();
+  loadCart();
+  pickFirstCat();
+  bind();
+}
+function renderCats(){
+  const host = el("#cats"); host.innerHTML = "";
+  DATA.categories.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "cat" + (c.id===state.cat ? " active": "");
+    b.textContent = c.name;
+    b.onclick = ()=>{ state.cat=c.id; renderCats(); renderProducts(); };
+    host.appendChild(b);
+  });
+}
+function pickFirstCat(){
+  if(!state.cat && DATA.categories.length) { state.cat = DATA.categories[0].id; renderCats(); renderProducts(); }
+}
+function renderProducts(){
+  const host = el("#products"); host.innerHTML = "";
+  const list = DATA.products
+     .filter(p => (!state.cat || p.category===state.cat))
+     .filter(p => (!state.filter || p.title.includes(state.filter)));
+  if(!list.length){ host.innerHTML = `<div class="empty">لا توجد منتجات</div>`; return; }
+  list.forEach(p=>{
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.title}" loading="lazy">
+      <div class="p">
+        <div class="title">${p.title}</div>
+        <div class="price">${fmt(p.price, DATA.currency)}</div>
+        <div style="display:flex; gap:8px">
+          <button class="btn btn-ghost" data-details="${p.id}">التفاصيل</button>
+          <button class="btn btn-primary" data-add="${p.id}">إضافة</button>
+        </div>
+      </div>`;
+    host.appendChild(card);
+  });
+}
+function loadCart(){
+  try{ state.items = JSON.parse(localStorage.getItem("cart")) || {}; }catch(e){ state.items = {}; }
+  syncCart();
+}
+function syncCart(){
+  localStorage.setItem("cart", JSON.stringify(state.items));
+  renderCart();
+}
+function renderCart(){
+  const list = el("#cartList"); list.innerHTML = "";
+  const entries = Object.entries(state.items);
+  if(!entries.length){ list.innerHTML = `<div class="empty">السلة فارغة</div>`; }
+  else{
+    entries.forEach(([id,qty])=>{
+      const p = DATA.products.find(x=>x.id===id); if(!p) return;
+      const row = document.createElement("div");
+      row.className="cart-item";
+      row.innerHTML = `
+        <div>${p.title}</div>
+        <div style="color:#6b7280">${fmt(p.price, DATA.currency)}</div>
+        <div class="qty">
+          <button data-dec="${id}">-</button>
+          <span>${qty}</span>
+          <button data-inc="${id}">+</button>
+        </div>
+        <button data-rem="${id}">✕</button>`;
+      list.appendChild(row);
+    });
+  }
+  el("#cartCount").textContent = Object.values(state.items).reduce((a,b)=>a+b,0);
+  el("#total").textContent = fmt(cartTotal(), DATA.currency);
+}
+function add(id){ state.items[id] = (state.items[id]||0)+1; syncCart(); }
+function inc(id){ add(id); }
+function dec(id){ state.items[id] = Math.max(0,(state.items[id]||0)-1); if(state.items[id]===0) delete state.items[id]; syncCart(); }
+function rem(id){ delete state.items[id]; syncCart(); }
+function cartTotal(){
+  return Object.entries(state.items).reduce((sum,[id,qty])=>{
+    const p = DATA.products.find(x=>x.id===id);
+    return sum + (p?p.price*qty:0);
+  },0);
+}
+function checkout(){
+  const entries = Object.entries(state.items);
+  if(!entries.length){ alert("السلة فارغة"); return; }
+  const lines = [];
+  lines.push("طلب جديد - الدفع عند الاستلام");
+  lines.push("— — —");
+  entries.forEach(([id,qty])=>{
+    const p = DATA.products.find(x=>x.id===id);
+    if(p) lines.push(`• ${p.title} × ${qty} = ${fmt(p.price*qty, DATA.currency)}`);
+  });
+  lines.push("— — —");
+  lines.push("الإجمالي: " + fmt(cartTotal(), DATA.currency));
+  lines.push("الاسم:");
+  lines.push("العنوان:");
+  lines.push("ملاحظة:");
+  const text = encodeURIComponent(lines.join("\n"));
+  const url = `https://wa.me/${DATA.whatsappPhone}?text=${text}`;
+  window.open(url, "_blank");
+}
+function openDetails(id){
+  const p = DATA.products.find(x=>x.id===id); if(!p) return;
+  el("#mTitle").textContent = p.title;
+  el("#mImg").src = p.img;
+  el("#mImg").alt = p.title;
+  el("#mDesc").textContent = p.desc || "";
+  el("#mPrice").textContent = fmt(p.price, DATA.currency);
+  el("#mAdd").onclick = ()=>{ add(id); modal.close(); };
+  modal.showModal();
+}
+function bind(){
+  el("#q").addEventListener("input", e=>{ state.filter = e.target.value.trim(); renderProducts(); });
+  document.addEventListener("click", e=>{
+    const addId = e.target.getAttribute("data-add");
+    const incId = e.target.getAttribute("data-inc");
+    const decId = e.target.getAttribute("data-dec");
+    const remId = e.target.getAttribute("data-rem");
+    const det = e.target.getAttribute("data-details");
+    if(addId) add(addId);
+    if(incId) inc(incId);
+    if(decId) dec(decId);
+    if(remId) rem(remId);
+    if(det) openDetails(det);
+  });
+  el("#checkout").addEventListener("click", checkout);
+  document.getElementById("year").textContent = new Date().getFullYear();
+}
+load();
+</script>
+</body>
+</html>
