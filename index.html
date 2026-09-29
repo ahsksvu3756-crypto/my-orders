@@ -1,237 +1,26 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>كاندي كات - مستلزمات الحيوانات</title>
-  <meta name="theme-color" content="#0a7c2f">
-  <style>
-    :root{--gap:12px;--r:12px;--shadow:0 8px 24px rgba(0,0,0,.08);--pri:#0a7c2f;}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Naskh Arabic",Arial,sans-serif;background:#fafafa;color:#1f2937}
-    header{position:sticky;top:0;background:#fff;box-shadow:var(--shadow);z-index:10;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between}
-    h1{font-size:18px;margin:0}
-    .container{max-width:1100px;margin:16px auto;padding:0 14px;display:grid;grid-template-columns:240px 1fr;gap:var(--gap)}
-    @media (max-width: 900px){.container{grid-template-columns:1fr} aside{order:-1}}
-    aside{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:10px;height:max-content;position:sticky;top:68px}
-    .cats{display:flex;flex-direction:column;gap:6px}
-    .cat{border:none;border-radius:10px;padding:10px;font-weight:600;cursor:pointer;background:#f2f2f2;text-align:right}
-    .cat.active{background:var(--pri);color:#fff}
-    .search{display:flex;gap:8px;margin-top:8px}
-    input[type="search"]{flex:1;padding:10px;border-radius:10px;border:1px solid #e5e7eb}
-    main{display:flex;flex-direction:column;gap:var(--gap)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--gap)}
-    .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
-    .card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee}
-    .p{padding:10px;display:flex;flex-direction:column;gap:6px}
-    .title{font-weight:700}
-    .price{color:var(--pri);font-weight:800}
-    .btn{border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
-    .btn-primary{background:var(--pri);color:#fff}
-    .btn-ghost{background:#f2f2f2}
-    .toolbar{display:flex;gap:10px;align-items:center}
-    .badge{background:var(--pri);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
-    .cart{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:10px;position:sticky;top:68px;height:max-content}
-    .cart h3{margin:6px 4px}
-    .cart-item{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center}
-    .qty{display:flex;align-items:center;gap:6px}
-    .qty button{width:28px;height:28px;border-radius:8px;border:none;background:#f2f2f2;cursor:pointer}
-    .totals{display:flex;justify-content:space-between;font-weight:800;padding-top:8px;border-top:1px dashed #e5e7eb}
-    footer{text-align:center;padding:30px;color:#6b7280}
-    .empty{text-align:center;color:#6b7280;padding:16px}
-    dialog{border:none;border-radius:14px;box-shadow:var(--shadow);max-width:520px;width:92%;padding:0}
-    dialog::backdrop{background:rgba(0,0,0,.35)}
-    .modal-body{padding:12px}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee}
-    .close{border:none;background:transparent;font-size:22px;cursor:pointer}
-  </style>
-</head>
-<body>
-  <header>
-    <h1 id="shopName">كاندي كات</h1>
-    <div class="toolbar">
-      <div class="search"><input id="q" type="search" placeholder="ابحث عن منتج…"></div>
-      <div>🛒 <span id="cartCount" class="badge">0</span></div>
-    </div>
-  </header>
-
-  <div class="container">
-    <aside>
-      <strong>الأقسام</strong>
-      <div id="cats" class="cats"></div>
-    </aside>
-
-    <main>
-      <div id="products" class="grid"></div>
-    </main>
-
-    <div class="cart">
-      <h3>سلة الشراء</h3>
-      <div id="cartList"></div>
-      <div class="totals"><span>المجموع</span><span id="total">0</span></div>
-      <button id="checkout" class="btn btn-primary">إكمال الطلب عبر واتساب</button>
-      <div class="empty">الدفع عند الاستلام</div>
-    </div>
-  </div>
-
-  <footer>© <span id="year"></span> <span id="shopName2">كاندي كات</span></footer>
-
-  <dialog id="modal">
-    <div class="modal-header">
-      <strong id="mTitle"></strong>
-      <button class="close" onclick="modal.close()">✕</button>
-    </div>
-    <div class="modal-body">
-      <img id="mImg" alt="" style="width:100%;border-radius:12px;aspect-ratio:16/9;object-fit:cover;background:#eee">
-      <p id="mDesc" style="margin-top:10px;color:#374151"></p>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-        <span id="mPrice" class="price"></span>
-        <button id="mAdd" class="btn btn-primary">إضافة للسلة</button>
-      </div>
-    </div>
-  </dialog>
-
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><title>حساباتي - إدارة الطلبات</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f6f7f9;color:#111827;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}.app{max-width:1100px;margin:auto;padding:14px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.top h1{margin:0;font-size:25px}.muted{color:#667085;font-size:13px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}.card,.box{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px}.card b{display:block;font-size:20px;margin-top:4px}.box{margin:10px 0}.tabs{display:flex;gap:7px;overflow:auto;margin:10px 0}.tab{white-space:nowrap;background:#e9edf2;color:#111827}.tab.on,.primary{background:#111827;color:#fff}.green{background:#eaf8ef;color:#146c3c}.danger{background:#fff0f0;color:#a51d1d}.secondary{background:#eef1f4;color:#111827}button,.btn,input,select,textarea{font:inherit;border-radius:11px}button,.btn{border:0;padding:11px 13px;font-weight:700;cursor:pointer}input,select,textarea{width:100%;padding:12px;border:1px solid #cfd5dd;background:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}.actions{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}.actions>*{width:auto}.pane{display:none}.pane.on{display:block}.scanbox{border:1px dashed #aab3bf;border-radius:14px;padding:12px;background:#fafbfc}.camera{display:none}.camera video{width:100%;max-height:350px;background:#000;border-radius:12px}.status{margin:8px 0;padding:9px 11px;border-radius:10px;background:#f2f4f7}.ok{background:#ecfdf3;color:#176b3a}.err{background:#fff1f0;color:#a51d1d}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #edf0f2;text-align:right;white-space:nowrap}.warn{background:#fff7e6}.pill{padding:3px 7px;background:#eef1f4;border-radius:999px;font-size:12px}.footer{font-size:12px;color:#667085;margin:15px 2px}.big{font-size:18px;font-weight:800}.hidden{display:none!important}@media(max-width:720px){.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.full{grid-column:auto}.app{padding:10px}}@media(max-width:400px){.cards{grid-template-columns:1fr 1fr}.card b{font-size:17px}}
+</style></head><body><div class="app"><div class="top"><div><h1>حساباتي</h1><div class="muted">سجل مستقل لتدقيق طلبات التوصيل</div></div><span class="pill">محلي على جهازك</span></div>
+<div class="cards"><div class="card">عدد الطلبات<b id="count">0</b></div><div class="card">الإجمالي<b id="gross">0</b></div><div class="card">التوصيل<b id="shipping">0</b></div><div class="card">الصافي<b id="net">0</b></div></div>
+<div class="tabs"><button class="tab on" data-p="add">إضافة طلب</button><button class="tab" data-p="orders">الطلبات</button><button class="tab" data-p="audit">تدقيق الشركة</button><button class="tab" data-p="backup">النسخ الاحتياطي</button></div>
+<section id="add" class="pane on"><div class="box"><div class="big">إضافة طلب جديد</div><p class="muted">امسح QR الوصل أو اكتب رقم الوصل. السعر هنا هو السعر الكامل الذي يدفعه الزبون شامل التوصيل.</p>
+<div class="scanbox"><div class="actions"><button class="green" id="scanBtn">📷 مسح QR بالكاميرا</button><label class="btn secondary">🖼️ تصوير/اختيار QR<input id="barcodeImage" type="file" accept="image/*" capture="environment" hidden></label></div><div id="camera" class="camera"><video id="video" playsinline></video><div class="actions"><button class="danger" id="stopScan">إيقاف</button></div></div><div id="scanStatus" class="status">إذا ما اشتغلت الكاميرا، استخدم «تصوير/اختيار QR» أو اكتب رقم الوصل.</div></div>
+<form id="form" class="grid" style="margin-top:12px"><label>رقم الوصل<input id="receipt" inputmode="numeric" autocomplete="off" required placeholder="مثال: 146092300703"></label><label>تاريخ الإضافة<input id="date" type="date" required></label><label>السعر شامل التوصيل<input id="total" type="number" min="0" step="1" required placeholder="مثال: 43000"></label><label>أجرة التوصيل<input id="ship" type="number" min="0" step="1" value="3500" required></label><label>اسم الزبون<input id="customer" placeholder="اختياري"></label><label>رقم الهاتف<input id="phone" inputmode="tel" placeholder="اختياري"></label><label class="full">العنوان / التفاصيل<input id="address" placeholder="اختياري"></label><button class="primary full" type="submit">حفظ الطلب</button></form></div></section>
+<section id="orders" class="pane"><div class="box"><div class="top"><div class="big">كل الطلبات</div><input id="search" style="max-width:260px" placeholder="بحث برقم الوصل أو الزبون"></div><div class="tablewrap"><table><thead><tr><th>#</th><th>رقم الوصل</th><th>التاريخ</th><th>الإجمالي</th><th>التوصيل</th><th>الصافي</th><th>الزبون</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
+<section id="audit" class="pane"><div class="box"><div class="big">تدقيق كشف شركة التوصيل</div><p class="muted">الصق أرقام الوصول الموجودة بكشف الشركة، رقم بكل سطر أو مفصولة بمسافة. راح نقارنها بسجلك ونطلع الناقص.</p><textarea id="company" rows="8" placeholder="146092300703&#10;146092300704"></textarea><div class="actions"><button class="primary" id="auditBtn">قارن الآن</button><button class="secondary" id="clearAudit">مسح</button></div><div id="auditResult"></div></div></section>
+<section id="backup" class="pane"><div class="box"><div class="big">الأمان والنسخة الاحتياطية</div><p class="muted">البيانات محفوظة داخل هذا المتصفح. نزّل نسخة احتياطية بشكل دوري، خصوصًا قبل تبديل الجهاز أو حذف بيانات المتصفح.</p><div class="actions"><button class="primary" id="export">⬇️ تنزيل نسخة احتياطية</button><label class="btn secondary">⬆️ استيراد نسخة<input id="import" type="file" accept="application/json" hidden></label><button class="secondary" id="csv">تصدير CSV</button><button class="danger" id="clear">مسح كل البيانات</button></div></div></section>
+<div class="footer">تنبيه: ماكو برنامج يضمن صفر أخطاء، لذلك النظام يمنع تكرار رقم الوصل ويتحقق من الأرقام ويتيح نسخة احتياطية وتدقيق مستقل. تشغيل الكاميرا قد يحتاج فتح الموقع عبر HTTPS، بينما الإدخال اليدوي وباقي الحسابات تعمل محليًا.</div></div>
 <script>
-let DATA = null;
-const state = { cat:"", filter:"", items:{} };
-const el = s => document.querySelector(s);
-const fmt = (n, cur) => n.toLocaleString('ar-IQ') + " " + cur;
-
-async function load(){
-  const res = await fetch("data.json?cache="+Date.now());
-  DATA = await res.json();
-  document.title = DATA.shopName + " - مستلزمات الحيوانات";
-  el("#shopName").textContent = DATA.shopName;
-  el("#shopName2").textContent = DATA.shopName;
-  renderCats();
-  loadCart();
-  pickFirstCat();
-  bind();
-}
-function renderCats(){
-  const host = el("#cats"); host.innerHTML = "";
-  DATA.categories.forEach(c=>{
-    const b = document.createElement("button");
-    b.className = "cat" + (c.id===state.cat ? " active": "");
-    b.textContent = c.name;
-    b.onclick = ()=>{ state.cat=c.id; renderCats(); renderProducts(); };
-    host.appendChild(b);
-  });
-}
-function pickFirstCat(){
-  if(!state.cat && DATA.categories.length) { state.cat = DATA.categories[0].id; renderCats(); renderProducts(); }
-}
-function renderProducts(){
-  const host = el("#products"); host.innerHTML = "";
-  const list = DATA.products
-     .filter(p => (!state.cat || p.category===state.cat))
-     .filter(p => (!state.filter || p.title.includes(state.filter)));
-  if(!list.length){ host.innerHTML = `<div class="empty">لا توجد منتجات</div>`; return; }
-  list.forEach(p=>{
-    const card = document.createElement("div");
-    card.className="card";
-    card.innerHTML = `
-      <img src="${p.img}" alt="${p.title}" loading="lazy">
-      <div class="p">
-        <div class="title">${p.title}</div>
-        <div class="price">${fmt(p.price, DATA.currency)}</div>
-        <div style="display:flex; gap:8px">
-          <button class="btn btn-ghost" data-details="${p.id}">التفاصيل</button>
-          <button class="btn btn-primary" data-add="${p.id}">إضافة</button>
-        </div>
-      </div>`;
-    host.appendChild(card);
-  });
-}
-function loadCart(){
-  try{ state.items = JSON.parse(localStorage.getItem("cart")) || {}; }catch(e){ state.items = {}; }
-  syncCart();
-}
-function syncCart(){
-  localStorage.setItem("cart", JSON.stringify(state.items));
-  renderCart();
-}
-function renderCart(){
-  const list = el("#cartList"); list.innerHTML = "";
-  const entries = Object.entries(state.items);
-  if(!entries.length){ list.innerHTML = `<div class="empty">السلة فارغة</div>`; }
-  else{
-    entries.forEach(([id,qty])=>{
-      const p = DATA.products.find(x=>x.id===id); if(!p) return;
-      const row = document.createElement("div");
-      row.className="cart-item";
-      row.innerHTML = `
-        <div>${p.title}</div>
-        <div style="color:#6b7280">${fmt(p.price, DATA.currency)}</div>
-        <div class="qty">
-          <button data-dec="${id}">-</button>
-          <span>${qty}</span>
-          <button data-inc="${id}">+</button>
-        </div>
-        <button data-rem="${id}">✕</button>`;
-      list.appendChild(row);
-    });
-  }
-  el("#cartCount").textContent = Object.values(state.items).reduce((a,b)=>a+b,0);
-  el("#total").textContent = fmt(cartTotal(), DATA.currency);
-}
-function add(id){ state.items[id] = (state.items[id]||0)+1; syncCart(); }
-function inc(id){ add(id); }
-function dec(id){ state.items[id] = Math.max(0,(state.items[id]||0)-1); if(state.items[id]===0) delete state.items[id]; syncCart(); }
-function rem(id){ delete state.items[id]; syncCart(); }
-function cartTotal(){
-  return Object.entries(state.items).reduce((sum,[id,qty])=>{
-    const p = DATA.products.find(x=>x.id===id);
-    return sum + (p?p.price*qty:0);
-  },0);
-}
-function checkout(){
-  const entries = Object.entries(state.items);
-  if(!entries.length){ alert("السلة فارغة"); return; }
-  const lines = [];
-  lines.push("طلب جديد - الدفع عند الاستلام");
-  lines.push("— — —");
-  entries.forEach(([id,qty])=>{
-    const p = DATA.products.find(x=>x.id===id);
-    if(p) lines.push(`• ${p.title} × ${qty} = ${fmt(p.price*qty, DATA.currency)}`);
-  });
-  lines.push("— — —");
-  lines.push("الإجمالي: " + fmt(cartTotal(), DATA.currency));
-  lines.push("الاسم:");
-  lines.push("العنوان:");
-  lines.push("ملاحظة:");
-  const text = encodeURIComponent(lines.join("\n"));
-  const url = `https://wa.me/${DATA.whatsappPhone}?text=${text}`;
-  window.open(url, "_blank");
-}
-function openDetails(id){
-  const p = DATA.products.find(x=>x.id===id); if(!p) return;
-  el("#mTitle").textContent = p.title;
-  el("#mImg").src = p.img;
-  el("#mImg").alt = p.title;
-  el("#mDesc").textContent = p.desc || "";
-  el("#mPrice").textContent = fmt(p.price, DATA.currency);
-  el("#mAdd").onclick = ()=>{ add(id); modal.close(); };
-  modal.showModal();
-}
-function bind(){
-  el("#q").addEventListener("input", e=>{ state.filter = e.target.value.trim(); renderProducts(); });
-  document.addEventListener("click", e=>{
-    const addId = e.target.getAttribute("data-add");
-    const incId = e.target.getAttribute("data-inc");
-    const decId = e.target.getAttribute("data-dec");
-    const remId = e.target.getAttribute("data-rem");
-    const det = e.target.getAttribute("data-details");
-    if(addId) add(addId);
-    if(incId) inc(incId);
-    if(decId) dec(decId);
-    if(remId) rem(remId);
-    if(det) openDetails(det);
-  });
-  el("#checkout").addEventListener("click", checkout);
-  document.getElementById("year").textContent = new Date().getFullYear();
-}
-load();
-</script>
-</body>
-</html>
+const KEY='hisabati_orders_v3', $=x=>document.getElementById(x), money=n=>Number(n||0).toLocaleString('en-US')+' د.ع';let orders=[];try{orders=JSON.parse(localStorage.getItem(KEY)||'[]')}catch{};$('date').value=new Date().toISOString().slice(0,10);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.pane').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.p).classList.add('on')});
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function save(){localStorage.setItem(KEY,JSON.stringify(orders));render()}function totals(){let g=orders.reduce((s,o)=>s+Number(o.total),0),sh=orders.reduce((s,o)=>s+Number(o.ship),0);return[g,sh,g-sh]}function render(){let[g,sh,n]=totals();$('count').textContent=orders.length;$('gross').textContent=money(g);$('shipping').textContent=money(sh);$('net').textContent=money(n);renderRows()}
+function renderRows(){let q=$('search').value.trim().toLowerCase(),a=orders.filter(o=>!q||o.receipt.includes(q)||(o.customer||'').toLowerCase().includes(q)||(o.phone||'').includes(q));$('rows').innerHTML=a.map((o,i)=>`<tr><td>${i+1}</td><td><b>${esc(o.receipt)}</b></td><td>${esc(o.date)}</td><td>${money(o.total)}</td><td>${money(o.ship)}</td><td>${money(o.total-o.ship)}</td><td>${esc(o.customer||'-')}</td><td><button class="danger" onclick="delOrder('${o.receipt}')">حذف</button></td></tr>`).join('')||'<tr><td colspan="8" class="muted">ماكو نتائج.</td></tr>'}$('search').oninput=renderRows;
+$('form').onsubmit=e=>{e.preventDefault();let receipt=$('receipt').value.replace(/\D/g,'').trim(),total=Number($('total').value),ship=Number($('ship').value);if(receipt.length<6)return alert('رقم الوصل غير صحيح.');if(orders.some(o=>o.receipt===receipt))return alert('هذا الوصل مسجل مسبقًا.');if(!Number.isSafeInteger(total)||!Number.isSafeInteger(ship)||total<0||ship<0||ship>total)return alert('راجع السعر وأجرة التوصيل.');orders.unshift({receipt,date:$('date').value,total,ship,customer:$('customer').value.trim(),phone:$('phone').value.trim(),address:$('address').value.trim(),created:new Date().toISOString()});save();e.target.reset();$('date').value=new Date().toISOString().slice(0,10);$('ship').value=3500;alert('تم حفظ الطلب بنجاح.');$('receipt').focus()};window.delOrder=r=>{if(confirm('حذف هذا الطلب؟')){orders=orders.filter(o=>o.receipt!==r);save()}};
+function setCode(raw){let nums=String(raw).match(/\d{6,}/g),code=nums?nums.sort((a,b)=>b.length-a.length)[0]:String(raw).trim();$('receipt').value=code;$('scanStatus').className='status ok';$('scanStatus').textContent='تمت القراءة: '+code;$('total').focus()}
+async function detector(){if(!('BarcodeDetector'in window))throw Error('هذا المتصفح ما يدعم قراءة QR مباشرة. جرّب زر تصوير/اختيار QR، وإذا ما انقراه اكتب رقم الوصل يدويًا.');let f=await BarcodeDetector.getSupportedFormats();let formats=f.includes('qr_code')?['qr_code']:f;return new BarcodeDetector({formats})}
+let stream=null,scanning=false;$('scanBtn').onclick=async()=>{try{if(!navigator.mediaDevices?.getUserMedia)throw Error('الكاميرا تحتاج نسخة منشورة من الموقع عبر HTTPS. استخدم تصوير/اختيار QR حاليًا.');let d=await detector();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});$('video').srcObject=stream;await $('video').play();$('camera').style.display='block';scanning=true;$('scanStatus').textContent='وجّه الكاميرا نحو QR...';let loop=async()=>{if(!scanning)return;try{let b=await d.detect($('video'));if(b.length){setCode(b[0].rawValue);stop();return}}catch{}requestAnimationFrame(loop)};loop()}catch(e){$('scanStatus').className='status err';$('scanStatus').textContent=e.message}};function stop(){scanning=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$('camera').style.display='none'}$('stopScan').onclick=stop;
+$('barcodeImage').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=await detector(),bmp=await createImageBitmap(f),b=await d.detect(bmp);if(!b.length)throw Error('ما انقرا QR من الصورة. جرّب صورة أقرب وواضحة، أو اكتب رقم الوصل.');setCode(b[0].rawValue)}catch(err){$('scanStatus').className='status err';$('scanStatus').textContent=err.message}finally{e.target.value=''}};
+$('auditBtn').onclick=()=>{let codes=($('company').value.match(/\d{6,}/g)||[]),set=new Set(codes),mine=new Set(orders.map(o=>o.receipt)),missing=orders.filter(o=>!set.has(o.receipt)),extra=[...set].filter(x=>!mine.has(x));let missingTotal=missing.reduce((s,o)=>s+o.total,0);$('auditResult').innerHTML=`<div class="status ${missing.length?'err':'ok'}"><b>الموجود بسجلك والناقص من كشف الشركة: ${missing.length}</b>${missing.length?'<br>'+missing.map(o=>esc(o.receipt)+' — '+money(o.total)).join('<br>')+'<br><b>مجموعها: '+money(missingTotal)+'</b>':'<br>ماكو طلبات ناقصة حسب الأرقام المدخلة.'}</div><div class="status"><b>موجود بكشف الشركة وغير موجود بسجلك: ${extra.length}</b>${extra.length?'<br>'+extra.map(esc).join('<br>'):''}</div>`};$('clearAudit').onclick=()=>{$('company').value='';$('auditResult').innerHTML=''};
+$('export').onclick=()=>download('hisabati-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:3,exported:new Date().toISOString(),orders},null,2),'application/json');function download(name,data,type){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([data],{type}));a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}$('import').onchange=async e=>{try{let d=JSON.parse(await e.target.files[0].text()),a=Array.isArray(d)?d:d.orders;if(!Array.isArray(a))throw 0;let seen=new Set();a=a.filter(o=>o&&o.receipt&&!seen.has(String(o.receipt))&&seen.add(String(o.receipt)));orders=a;save();alert('تم استيراد '+a.length+' طلب.')}catch{alert('ملف النسخة غير صالح.')}e.target.value=''};
+$('csv').onclick=()=>{let rows=[['رقم الوصل','التاريخ','الإجمالي','التوصيل','الصافي','الزبون','الهاتف','العنوان'],...orders.map(o=>[o.receipt,o.date,o.total,o.ship,o.total-o.ship,o.customer||'',o.phone||'',o.address||''])],csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');download('orders-'+new Date().toISOString().slice(0,10)+'.csv',csv,'text/csv;charset=utf-8')};$('clear').onclick=()=>{if(confirm('راح تنمسح كل الطلبات من هذا الجهاز. متأكد؟')){orders=[];save()}};render();
+</script></body></html>
